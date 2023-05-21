@@ -21,12 +21,10 @@ def main():
 
     start = time.perf_counter()
 
-    display.run_timer(minutes, seconds, label_string)
+    display.run_timer_countdown(minutes, seconds, label_string)
+    # display.run_timer_countup(label_string)
+
     total_time = time.perf_counter() - start
-
-    display.timer_complete(label_string)
-
-    # file = "~/code/projects/timer/sounds/beep.wav"
 
     utils.clear_screen()
 
