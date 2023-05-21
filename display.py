@@ -56,7 +56,7 @@ def run_timer(minutes, seconds, label_string):
     seconds = 0 if seconds is None else seconds
 
     delay = 0
-    delay += minutes  # * 60
+    delay += minutes * 60
     delay += seconds
 
     def sleeper(): return time.sleep(1)
