@@ -1,32 +1,14 @@
 import time
 import utils
-import shutil
 import threading
+from display.display_utils import (
+    calc_string_offset,
+    calc_term_offset,
+    calc_time,
+    color_text,
+    Color)
 
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-
-
-def color_text(text: str, r: int, g: int, b: int) -> str:
-    '''Sets a string to a color specified by RGB values'''
-    return f"\033[38;2;{r};{g};{b}m{text}\033[0m"
-
-
-def calc_term_offset() -> tuple[int, int]:
-    x, y = shutil.get_terminal_size()
-    return x // 2, y // 2 - 1
-
-
-def calc_string_offset(string) -> int:
-    if len(string) % 2 == 0:
-        return len(string) // 2
-    return 1 + len(string) // 2
-
-
-def calc_time(delay: int) -> tuple[int, int]:
-    minutes, seconds = divmod(delay, 60)
-    minutes, seconds = f"{minutes}".zfill(2), f"{seconds}".zfill(2)
-    return minutes, seconds
+__all__ = ['display_timer_countdown', 'display_timer_countup']
 
 
 def display_timer_countdown(delay, color, label_string) -> None:
@@ -57,10 +39,12 @@ def run_timer_countdown(minutes, seconds, label_string):
     delay += seconds
 
     def sleeper(): return time.sleep(1)
-    def timer_cowndown(): return display_timer_countdown(delay, RED, label_string)
+
+    def timer_cowndown(): return display_timer_countdown(
+        delay, Color.RED.value, label_string)
 
     def timer_complete(): return display_timer_countdown(
-        delay, GREEN, label_string + " (COMPLETE)")
+        delay, Color.GREEN.value, label_string + " (COMPLETE)")
 
     try:
         while delay:
