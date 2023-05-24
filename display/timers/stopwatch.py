@@ -7,8 +7,8 @@ __all__ = ['Stopwatch']
 
 class Stopwatch(Timer):
 
-    def __init__(self, label_string, delay=0):
-        super().__init__(label_string, delay)
+    def __init__(self, label_string, delay):
+        super().__init__(label_string, 0)
 
     def display_timer(self):
         result = self.display_string.format(
@@ -31,11 +31,12 @@ class Stopwatch(Timer):
                 t1 = threading.Thread(target=sleeper)
                 t2 = threading.Thread(target=self.display_timer)
 
-                self.delay += 1
                 t1.start()
                 t2.start()
                 t1.join()
                 t2.join()
+
+                self.delay += 1
         except KeyboardInterrupt:
             pass
 
