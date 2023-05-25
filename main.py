@@ -6,11 +6,11 @@ import parsing
 
 def main():
     utils.clear_screen()
-    start = time.perf_counter()
     parser = parsing.ArgvParser(sys.argv[1:])
-    mode, label, duration = parser.parsed_args()
+    mode, label, duration = parser.parsed_args
 
     timer = mode(label, duration)
+    start = time.perf_counter()
     timer.run()
 
     total_time = time.perf_counter() - start
