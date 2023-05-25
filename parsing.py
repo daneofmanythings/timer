@@ -4,22 +4,14 @@
 # (number) : minutes
 # XX:XX : full time
 
-from enum import Enum, auto
+from enum import Enum
 import display
 
 
 class Optionals(Enum):
     COUNTDOWN = display.Countdown
     STOPWATCH = display.Stopwatch
-    HELP = auto()
-
-
-class Duration:
-    def __init__(self, input):
-        self.input = input
-
-    def __repr__(self):
-        return f'{self.input}'
+    HELP = display.Helper
 
 
 class ArgvParser:
@@ -32,6 +24,8 @@ class ArgvParser:
         self.parser()
 
     def parser(self):
+        if len(self.argvs) == 0:
+            self.mode = Optionals.HELP
         for argv in self.argvs:
             if self.duration == 0 and (len(argv.split(":")) > 1 or argv.isdigit()):
                 self.duration += int(argv.split(":")[0]) * 60
@@ -47,6 +41,7 @@ class ArgvParser:
                 if not self.title:
                     self.title = argv
 
+    @property
     def parsed_args(self):
         return self.mode.value, self.title, self.duration
 
