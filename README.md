@@ -1,8 +1,6 @@
-<!-- # Timer -->
-<h3 align="center">
-    ![screenshot](assets/screenshot.png)  
-    Timer for the terminal!
-</h3>
+# Timer
+### _for the terminal_
+![screenshot](assets/screenshot.png)  
 
 A simple terminal based timer with several modes.  
 Usage commands ![here](display/help/help.md)  
