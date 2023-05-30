@@ -6,6 +6,9 @@ from enum import Enum
 class Color(Enum):
     RED = (255, 0, 0)
     GREEN = (0, 255, 0)
+    SOFT_GREEN = (50, 168, 104)
+    DARK_PINK = (168, 50, 109)
+    SOFT_YELLOW = (168, 158, 50)
 
 
 def clear_terminal():
