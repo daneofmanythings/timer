@@ -41,3 +41,14 @@ class Timer:
     def label_hori_adjust(self) -> int:
         x, _ = self.environment_offset()
         return ' ' * (x - self.label_offset())
+
+    def display_timer(self):
+        result = self.display_string.format(
+            self.vert_adjust(),
+            self.label_hori_adjust(),
+            self.label,
+            self.timer_hori_adjust(),
+            self.timer_string.format(*self.calc_timer())
+        )
+        self.clear_environment()
+        print(result)

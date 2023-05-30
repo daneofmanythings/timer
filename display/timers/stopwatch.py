@@ -10,17 +10,6 @@ class Stopwatch(Timer):
     def __init__(self, label_string, delay):
         super().__init__(label_string, 0)
 
-    def display_timer(self):
-        result = self.display_string.format(
-            self.vert_adjust(),
-            self.label_hori_adjust(),
-            self.label,
-            self.timer_hori_adjust(),
-            self.timer_string.format(*self.calc_timer())
-        )
-        self.clear_environment()
-        print(result)
-
     def run(self):
 
         pool = ThreadPoolExecutor()
