@@ -1,4 +1,4 @@
-import threading
+from concurrent.futures import ThreadPoolExecutor
 import time
 import display.display_utils as dutils
 from display.timers.timer import Timer
@@ -31,8 +31,27 @@ class Pomodoro(Timer):
         self.clear_environment()
         print(result)
 
+    def pomodoro(self, status, intervals):
+        if self.delay == 0:
+            if status is True:
+                intervals += 1
+                status = False
+                if not intervals % 4:
+                    self.label = Pomodoro.break_label
+                    self.delay = 30 * 60
+                else:
+                    self.label = Pomodoro.resting_label
+                    self.delay = 5 * 60
+            else:
+                self.label = Pomodoro.working_label
+                status = True
+                self.delay = 25 * 60
+
+        return status, intervals
+
     def run(self):
 
+        pool = ThreadPoolExecutor(3)
         def sleeper(): return time.sleep(1)
         working = True
         intervals_completed = 0
@@ -40,28 +59,13 @@ class Pomodoro(Timer):
         try:
             while True:
 
-                if self.delay == 0:
-                    if working is True:
-                        intervals_completed += 1
-                        working = False
-                        if not intervals_completed % 4:
-                            self.label = Pomodoro.break_label
-                            self.delay = 30 * 60
-                        else:
-                            self.label = Pomodoro.resting_label
-                            self.delay = 5 * 60
-                    else:
-                        self.label = Pomodoro.working_label
-                        working = True
-                        self.delay = 25 * 60
-
-                t1 = threading.Thread(target=sleeper)
-                t2 = threading.Thread(target=self.display_timer)
-
+                timer = pool.submit(sleeper)
+                working, intervals_completed = pool.submit(
+                    self.pomodoro, working, intervals_completed).result()
+                pool.submit(self.display_timer)
                 self.delay -= 1
-                t1.start()
-                t2.start()
-                t1.join()
-                t2.join()
+                timer.result()
         except KeyboardInterrupt:
             pass
+
+        pool.shutdown()

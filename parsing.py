@@ -10,6 +10,7 @@ import display
 
 class Optionals(Enum):
     COUNTDOWN = display.Countdown
+    COUNTDOWN_TEST = display.CountdownTest
     STOPWATCH = display.Stopwatch
     POMODORO = display.Pomodoro
     HELP = display.Helper
@@ -40,6 +41,8 @@ class ArgvParser:
                 self.mode = Optionals.STOPWATCH
             elif argv in ('-p', '--pomodoro'):
                 self.mode = Optionals.POMODORO
+            elif argv in ('-t', '--test'):
+                self.mode = Optionals.COUNTDOWN_TEST
             else:
                 if not self.title:
                     self.title = argv

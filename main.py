@@ -11,7 +11,9 @@ def main():
 
     timer = mode(label, duration)
     start = time.perf_counter()
-    timer.run()
+
+    with utils.NoCursor():
+        timer.run()
 
     total_time = time.perf_counter() - start
 
