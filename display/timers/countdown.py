@@ -1,4 +1,4 @@
-import threading
+from concurrent.futures import ThreadPoolExecutor
 import time
 import display.display_utils as dutils
 from display.timers.timer import Timer
@@ -7,6 +7,8 @@ __all__ = ['Countdown']
 
 
 class Countdown(Timer):
+
+    complete = dutils.color_text(' (COMPLETE)', *dutils.Color.GREEN.value)
 
     def __init__(self, label_string, delay):
         super().__init__(label_string, delay)
@@ -25,37 +27,26 @@ class Countdown(Timer):
     def run(self):
 
         def sleeper(): return time.sleep(1)
+        pool = ThreadPoolExecutor()
 
         try:
             while self.delay:
-                t1 = threading.Thread(target=sleeper)
-                t2 = threading.Thread(target=self.display_timer)
-
+                timer = pool.submit(sleeper)
+                pool.submit(self.display_timer)
+                timer.result()
                 self.delay -= 1
-                t1.start()
-                t2.start()
-                t1.join()
-                t2.join()
+
+            self.label = ' ' * 20 + self.label + Countdown.complete
 
             while True:
-                if self.delay == 0:
-                    s = self.color_text(
-                        ' (COMPLETE)', dutils.Color.GREEN.value)
-                    self.label += s
 
-                    # janky measure to counteract the string data from coloring
-                    self.label = ' ' * 20 + self.label
-
-                t1 = threading.Thread(target=sleeper)
-                t2 = threading.Thread(target=self.display_timer)
-
+                timer = pool.submit(sleeper)
+                pool.submit(self.display_timer)
+                timer.result()
                 self.delay += 1
-                t1.start()
-                t2.start()
-                t1.join()
-                t2.join()
+
         except KeyboardInterrupt:
-            pass
+            pool.shutdown()
 
 
 if __name__ == "__main__":

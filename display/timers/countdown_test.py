@@ -1,14 +1,15 @@
 from concurrent.futures import ThreadPoolExecutor
 import time
+# import display.display_utils as dutils
 from display.timers.timer import Timer
 
-__all__ = ['Stopwatch']
+__all__ = ['CountdownTest']
 
 
-class Stopwatch(Timer):
+class CountdownTest(Timer):
 
     def __init__(self, label_string, delay):
-        super().__init__(label_string, 0)
+        super().__init__(label_string, delay)
 
     def display_timer(self):
         result = self.display_string.format(
@@ -23,16 +24,17 @@ class Stopwatch(Timer):
 
     def run(self):
 
-        pool = ThreadPoolExecutor()
         def sleeper(): return time.sleep(1)
+        pool = ThreadPoolExecutor(3)
 
         try:
-            while True:
-
+            while self.delay:
                 timer = pool.submit(sleeper)
                 pool.submit(self.display_timer)
+
                 timer.result()
-                self.delay += 1
+
+                self.delay -= 1
 
         except KeyboardInterrupt:
             pool.shutdown()
