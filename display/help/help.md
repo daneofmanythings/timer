@@ -2,6 +2,7 @@ Welcome to the help file for 'timer'!
 
 ### Usage:
 * '-s' / '--stopwatch' >> launch in stopwatch mode
+* '-p' / '--pomodoro'  >> launch in pomodoro mode
 * '-h' / '--help'      >> launch help (this)
 * '#' / '#:#'          >> run the timer for #minutes or #minutes:#seconds
 
