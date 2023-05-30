@@ -20,17 +20,6 @@ class Pomodoro(Timer):
     def __init__(self, label_string, delay):
         super().__init__(Pomodoro.working_label, 25 * 60)
 
-    def display_timer(self):
-        result = self.display_string.format(
-            self.vert_adjust(),
-            self.label_hori_adjust(),
-            self.label,
-            self.timer_hori_adjust(),
-            self.timer_string.format(*self.calc_timer())
-        )
-        self.clear_environment()
-        print(result)
-
     def pomodoro(self, status, intervals):
         if self.delay == 0:
             if status is True:
